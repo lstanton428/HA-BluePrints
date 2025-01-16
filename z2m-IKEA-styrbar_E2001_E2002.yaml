@@ -49,13 +49,10 @@ blueprint:
   input:
     remote_devices:
       name: Remotes
-      description: List of IKEA STYRBAR remotes to use
+      description: Comma-separated list of device IDs of the remotes to use
+      default: ""
       selector:
-        device:
-          integration: mqtt
-          manufacturer: IKEA
-          model: STYRBAR remote control
-          multiple: true
+        text: {}
     button_on:
       name: Brightness up button - short press
       description: Action to run when SHORT press on brightness UP button
@@ -183,9 +180,7 @@ trigger:
 condition:
   - condition: template
     value_template: >
-      {{ trigger.event.data.device_id in 
-        [device.id for device in state('automation').entities if device.device_id in
-          state('input_text.remote_devices').split(',')] }}
+      {{ trigger.event.data.device_id in (states('input_text.remote_devices') | split(',') | map('trim') | list) }}
 
 action:
   - choose:
