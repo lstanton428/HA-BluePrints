@@ -1,3 +1,44 @@
+# ==========================================================
+# -------------------------------------------
+# IKEA STYRBAR remote control (E2001/E2002)
+# -------------------------------------------
+#  Button -> action mapping
+#  ---------------------------------------------------------
+# | Icon                   | Action  | Exposed Action       |
+# |---------------------------------------------------------|
+# | Light large ( top )    | push    | on                   |
+# | Light large ( top )    | hold    | brightness_move_up   |
+# | Light large ( top )    | release | brightness_stop      |
+# |---------------------------------------------------------|
+# | Light small ( bottom ) | push    | off                  |
+# | Light small ( bottom ) | hold    | brightness_move_down |
+# | Light small ( bottom ) | release | brightness_stop      |
+# |---------------------------------------------------------|
+# | Arrow left             | push    | arrow_left_click     |
+# | Arrow left             | hold    | arrow_left_hold      |
+# | Arrow left             | release | arrow_left_release   |
+# |---------------------------------------------------------|
+# | Arrow right            | push    | arrow_right_click    |
+# | Arrow right            | hold    | arrow_right_hold     |
+# | Arrow right            | release | arrow_right_release  |
+# |---------------------------------------------------------|
+# | For the arrow buttons it seems that the hold/move       | 
+# | action  takes a bit longer to be send.                  |
+#  ---------------------------------------------------------
+# Action (enum)
+# The possible values are:
+#  1. on
+#  2. off
+#  3. brightness_move_up
+#  4. brightness_move_down
+#  5. brightness_stop
+#  6. arrow_left_click
+#  7. arrow_left_hold
+#  8. arrow_left_release
+#  9. arrow_right_click
+# 10. arrow_right_hold
+# 11. arrow_right_release
+# ==========================================================
 blueprint:
   name: z2m - IKEA STYRBAR remote control (E2001/E2002) - Multi-device
   description: >
