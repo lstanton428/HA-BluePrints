@@ -50,11 +50,11 @@ blueprint:
       name: Remotes
       description: Select IKEA STYRBAR remotes to use
       selector:
-        target:
-          entity:
-            integration: mqtt
-            manufacturer: IKEA
-            model: STYRBAR remote control
+        device:
+          integration: mqtt
+          manufacturer: IKEA
+          model: STYRBAR remote control
+          multiple: true
     button_on:
       name: Brightness up button - short press
       selector:
