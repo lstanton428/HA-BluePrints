@@ -40,15 +40,16 @@
 # 11. arrow_right_release
 # ==========================================================
 blueprint:
-  name: z2m - IKEA STYRBAR remote control (E2001/E2002) - Multi-device
+  name: z2m - IKEA STYRBAR remote control (E2001/E2002)
   description: >
     This blueprint is for the IKEA STYRBAR square, 4-button remote when used with zigbee2mqtt.
-    Supports multiple remotes, each triggering the same set of actions. Inputs left blank will do nothing.
+    You can trigger actions from multiple remotes by defining their `device_id`s.
+
   domain: automation
   input:
     remote_devices:
       name: Remotes
-      description: Select IKEA STYRBAR remotes to use
+      description: List of IKEA STYRBAR remotes to use
       selector:
         device:
           integration: mqtt
@@ -123,72 +124,37 @@ blueprint:
         action: {}
 
 trigger:
-  - platform: device
-    domain: mqtt
-    type: action
-    device_id: !input remote_devices
-    subtype: on
+  - platform: event
+    event_type: zha_event
+    event_data:
+      command: "off"
     id: press-top-z2m-e2001
-  - platform: device
-    domain: mqtt
-    type: action
-    device_id: !input remote_devices
-    subtype: off
+  - platform: event
+    event_type: zha_event
+    event_data:
+      command: "on"
     id: press-bottom-z2m-e2001
-  - platform: device
-    domain: mqtt
-    type: action
-    device_id: !input remote_devices
-    subtype: brightness_move_up
+  - platform: event
+    event_type: zha_event
+    event_data:
+      command: "brightness_move_up"
     id: hold-top-z2m-e2001
-  - platform: device
-    domain: mqtt
-    type: action
-    device_id: !input remote_devices
-    subtype: brightness_move_down
+  - platform: event
+    event_type: zha_event
+    event_data:
+      command: "brightness_move_down"
     id: hold-bottom-z2m-e2001
-  - platform: device
-    domain: mqtt
-    type: action
-    device_id: !input remote_devices
-    subtype: brightness_stop
+  - platform: event
+    event_type: zha_event
+    event_data:
+      command: "brightness_stop"
     id: release-z2m-e2001
-  - platform: device
-    domain: mqtt
-    type: action
-    device_id: !input remote_devices
-    subtype: arrow_left_click
-    id: press-left-z2m-e2001
-  - platform: device
-    domain: mqtt
-    type: action
-    device_id: !input remote_devices
-    subtype: arrow_left_hold
-    id: hold-left-z2m-e2001
-  - platform: device
-    domain: mqtt
-    type: action
-    device_id: !input remote_devices
-    subtype: arrow_left_release
-    id: release-left-z2m-e2001
-  - platform: device
-    domain: mqtt
-    type: action
-    device_id: !input remote_devices
-    subtype: arrow_right_click
-    id: press-right-z2m-e2001
-  - platform: device
-    domain: mqtt
-    type: action
-    device_id: !input remote_devices
-    subtype: arrow_right_hold
-    id: hold-right-z2m-e2001
-  - platform: device
-    domain: mqtt
-    type: action
-    device_id: !input remote_devices
-    subtype: arrow_right_release
-    id: release-right-z2m-e2001
+
+condition:
+  - condition: template
+    value_template: >
+      {{ trigger.event.data.device_id in
+        states('input_text.remote_devices').split(',') }}
 
 action:
   - choose:
