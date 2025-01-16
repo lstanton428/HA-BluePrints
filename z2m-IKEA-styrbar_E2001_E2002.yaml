@@ -42,18 +42,17 @@
 blueprint:
   homeassistant:
     min_version: 2024.10.0
-  author: yarafie
+  author: yarafie, modified by lstanton428
   domain: automation
-  name: z2m - IKEA STYRBAR remote control (E2001/E2002)
-  description: "This blueprint is for the IKEA STYRBAR square, 4-button remote when used with zigbee2mqtt.
-  It is for general use so all buttons can be connected to any action of your choice"
+  name: z2m - IKEA STYRBAR remote control (E2001/E2002) - Multi-device
+  description: "This blueprint is for the IKEA STYRBAR square, 4-button remote when used with zigbee2mqtt. Supports multiple remotes."
   source_url: https://github.com/yarafie/HA-BluePrints/blob/main/z2m-IKEA-styrbar_E2001_E2002.yaml
 #
 # Define UI and default values
   input:
-    remote_device:
-      name: Remote
-      description: Select IKEA STYRBAR remote to use
+    remote_devices:
+      name: Remotes
+      description: Select IKEA STYRBAR remotes to use
       default: []
       selector:
         device:
@@ -64,34 +63,34 @@ blueprint:
           - integration: mqtt
             manufacturer: IKEA
             model: STYRBAR remote control (E2001/E2002)
-          multiple: false
+          multiple: true
     button_on:
       name: Brightness up button - short press
-      description: Action to run when SHORT press on brighness UP button
+      description: Action to run when SHORT press on brightness UP button
       default: []
       selector:
         action: {}
     button_off:
       name: Brightness down button - short press
-      description: Action to run when SHORT press on brighness DOWN button
+      description: Action to run when SHORT press on brightness DOWN button
       default: []
       selector:
         action: {}
     button_brightness_move_up:
       name: Brightness up button - long press
-      description: Action to run when LONG press on brighness UP button
+      description: Action to run when LONG press on brightness UP button
       default: []
       selector:
         action: {}
     button_brightness_move_down:
       name: Brightness down button - long press
-      description: Action to run when LONG press on brighness DOWN button
+      description: Action to run when LONG press on brightness DOWN button
       default: []
       selector:
         action: {}
     button_brightness_stop:
       name: Brightness stop button - long release press
-      description: Action to run when LONG press on brighness (up or down) is released
+      description: Action to run when LONG press on brightness (up or down) is released
       default: []
       selector:
         action: {}
@@ -132,140 +131,100 @@ blueprint:
       selector:
         action: {}
 #
-# Define mode for automatiom
+# Define mode for automation
 mode: restart
 max_exceeded: silent
 #
 # Define Triggers for automation
-triggers:
-# TOP AND BOTTOM BUTTONS
-- trigger: device
-  domain: mqtt
-  device_id: !input remote_device
-  type: action
-  subtype: 'on'
-  id: press-top-z2m-e2001
-- trigger: device
-  domain: mqtt
-  device_id: !input remote_device
-  type: action
-  subtype: 'off'
-  id: press-bottom-z2m-e2001
-- trigger: device
-  domain: mqtt
-  device_id: !input remote_device
-  type: action
-  subtype: brightness_move_up
-  id: hold-top-z2m-e2001
-- trigger: device
-  domain: mqtt
-  device_id: !input remote_device
-  type: action
-  subtype: brightness_move_down
-  id: hold-bottom-z2m-e2001
-- trigger: device
-  domain: mqtt
-  device_id: !input remote_device
-  type: action
-  subtype: brightness_stop
-  id: release-z2m-e2001
-# ARROW LEFT BUTTON
-- trigger: device
-  domain: mqtt
-  device_id: !input remote_device
-  type: action
-  subtype: arrow_left_click
-  id: press-left-z2m-e2001
-- trigger: device
-  domain: mqtt
-  device_id: !input remote_device
-  type: action
-  subtype: arrow_left_hold
-  id: hold-left-z2m-e2001
-- trigger: device
-  domain: mqtt
-  device_id: !input remote_device
-  type: action
-  subtype: arrow_left_release
-  id: release-left-z2m-e2001
-# ARROW RIGHT BUTTON
-- trigger: device
-  domain: mqtt
-  device_id: !input remote_device
-  type: action
-  subtype: arrow_right_click
-  id: press-right-z2m-e2001
-- trigger: device
-  domain: mqtt
-  device_id: !input remote_device
-  type: action
-  subtype: arrow_right_hold
-  id: hold-right-z2m-e2001
-- trigger: device
-  domain: mqtt
-  device_id: !input remote_device
-  type: action
-  subtype: arrow_right_release
-  id: release-right-z2m-e2001
+trigger:
+  - platform: device
+    for_each:
+      device_id: !input remote_devices
+    triggers:
+      # TOP AND BOTTOM BUTTONS
+      - type: action
+        subtype: 'on'
+        id: press-top-z2m-e2001
+      - type: action
+        subtype: 'off'
+        id: press-bottom-z2m-e2001
+      - type: action
+        subtype: brightness_move_up
+        id: hold-top-z2m-e2001
+      - type: action
+        subtype: brightness_move_down
+        id: hold-bottom-z2m-e2001
+      - type: action
+        subtype: brightness_stop
+        id: release-z2m-e2001
+      # ARROW LEFT BUTTON
+      - type: action
+        subtype: arrow_left_click
+        id: press-left-z2m-e2001
+      - type: action
+        subtype: arrow_left_hold
+        id: hold-left-z2m-e2001
+      - type: action
+        subtype: arrow_left_release
+        id: release-left-z2m-e2001
+      # ARROW RIGHT BUTTON
+      - type: action
+        subtype: arrow_right_click
+        id: press-right-z2m-e2001
+      - type: action
+        subtype: arrow_right_hold
+        id: hold-right-z2m-e2001
+      - type: action
+        subtype: arrow_right_release
+        id: release-right-z2m-e2001
 #
 # Define actions
-actions:
-- choose:
-# TOP AND BOTTOM BUTTONS
-  - conditions:
-    - condition: trigger
-      id:
-      - press-top-z2m-e2001
-    sequence: !input "button_on"
-  - conditions:
-    - condition: trigger
-      id:
-      - press-bottom-z2m-e2001
-    sequence: !input "button_off"
-  - conditions:
-    - condition: trigger
-      id:
-      - hold-top-z2m-e2001
-    sequence: !input "button_brightness_move_up"
-  - conditions:
-    - condition: trigger
-      id:
-      - hold-bottom-z2m-e2001
-    sequence: !input "button_brightness_move_down"
-  - conditions:
-    - condition: trigger
-      id:
-      - release-z2m-e2001
-    sequence: !input "button_brightness_stop"
-#ARROW LEFT
-  - conditions:
-    - condition: trigger
-      id:
-      - press-left-z2m-e2001
-    sequence: !input "button_left_click"
-  - conditions:
-    - condition: trigger
-      id:
-      - hold-left-z2m-e2001
-    sequence: !input "button_left_hold"
-  - conditions:
-    - condition: trigger
-      id:
-      - release-left-z2m-e2001
-    sequence: !input "button_left_release"
-#ARROW RIGHT
-  - conditions:
-    - condition: trigger
-      id:
-      - press-right-z2m-e2001
-    sequence: !input "button_right_click"
-  - conditions:
-    - condition: trigger
-      id:
-      - hold-right-z2m-e2001
-    sequence: !input "button_right_hold"
-  - conditions:
-    - condition: trigger
-      id:
-      - release-right-z2m-e2001
-    sequence: !input "button_right_release"
+action:
+  - choose:
+      # TOP AND BOTTOM BUTTONS
+      - conditions:
+          - condition: trigger
+            id: press-top-z2m-e2001
+        sequence: !input "button_on"
+      - conditions:
+          - condition: trigger
+            id: press-bottom-z2m-e2001
+        sequence: !input "button_off"
+      - conditions:
+          - condition: trigger
+            id: hold-top-z2m-e2001
+        sequence: !input "button_brightness_move_up"
+      - conditions:
+          - condition: trigger
+            id: hold-bottom-z2m-e2001
+        sequence: !input "button_brightness_move_down"
+      - conditions:
+          - condition: trigger
+            id: release-z2m-e2001
+        sequence: !input "button_brightness_stop"
+      # ARROW LEFT
+      - conditions:
+          - condition: trigger
+            id: press-left-z2m-e2001
+        sequence: !input "button_left_click"
+      - conditions:
+          - condition: trigger
+            id: hold-left-z2m-e2001
+        sequence: !input "button_left_hold"
+      - conditions:
+          - condition: trigger
+            id: release-left-z2m-e2001
+        sequence: !input "button_left_release"
+      # ARROW RIGHT
+      - conditions:
+          - condition: trigger
+            id: press-right-z2m-e2001
+        sequence: !input "button_right_click"
+      - conditions:
+          - condition: trigger
+            id: hold-right-z2m-e2001
+        sequence: !input "button_right_hold"
+      - conditions:
+          - condition: trigger
+            id: release-right-z2m-e2001
+        sequence: !input "button_right_release"
