@@ -55,33 +55,33 @@ blueprint:
           manufacturer: IKEA
           model: STYRBAR remote control
           multiple: true
-        button_on:
+    button_on:
       name: Brightness up button - short press
-      description: Action to run when SHORT press on brighness UP button
+      description: Action to run when SHORT press on brightness UP button
       default: []
       selector:
         action: {}
     button_off:
       name: Brightness down button - short press
-      description: Action to run when SHORT press on brighness DOWN button
+      description: Action to run when SHORT press on brightness DOWN button
       default: []
       selector:
         action: {}
     button_brightness_move_up:
       name: Brightness up button - long press
-      description: Action to run when LONG press on brighness UP button
+      description: Action to run when LONG press on brightness UP button
       default: []
       selector:
         action: {}
     button_brightness_move_down:
       name: Brightness down button - long press
-      description: Action to run when LONG press on brighness DOWN button
+      description: Action to run when LONG press on brightness DOWN button
       default: []
       selector:
         action: {}
     button_brightness_stop:
-      name: Brightness stop button - long release press
-      description: Action to run when LONG press on brighness (up or down) is released
+      name: Brightness stop button - release
+      description: Action to run when LONG press (up or down) is released
       default: []
       selector:
         action: {}
@@ -111,7 +111,7 @@ blueprint:
         action: {}
     button_right_hold:
       name: Right button - hold
-      description: Action to run when HOLD press on RIGHT button
+      description: Action to run when HOLD press on RIGHT arrow button
       default: []
       selector:
         action: {}
