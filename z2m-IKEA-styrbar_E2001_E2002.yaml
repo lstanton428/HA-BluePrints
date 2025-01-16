@@ -43,7 +43,7 @@ blueprint:
   name: z2m - IKEA STYRBAR remote control (E2001/E2002) - Multi-device
   description: >
     This blueprint is for the IKEA STYRBAR square, 4-button remote when used with zigbee2mqtt.
-    Supports multiple remotes, each triggering the same set of actions.
+    Supports multiple remotes, each triggering the same set of actions. Inputs left blank will do nothing.
   domain: automation
   input:
     remote_devices:
@@ -161,3 +161,4 @@ action:
           - condition: template
             value_template: "{{ trigger.payload_json.action == 'arrow_right_release' }}"
         sequence: !input button_right_release
+    default: []
