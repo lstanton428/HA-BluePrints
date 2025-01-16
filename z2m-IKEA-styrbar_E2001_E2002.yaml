@@ -123,64 +123,117 @@ blueprint:
         action: {}
 
 trigger:
-  - platform: mqtt
-    topic: zigbee2mqtt/+
-    id: any_action
-
-condition:
-  - condition: template
-    value_template: >
-      {{ trigger.payload_json.action in [
-          'on', 'off', 'brightness_move_up', 'brightness_move_down',
-          'brightness_stop', 'arrow_left_click', 'arrow_left_hold',
-          'arrow_left_release', 'arrow_right_click', 'arrow_right_hold',
-          'arrow_right_release'
-      ] and trigger.topic.split('/')[-1] in expand('!input remote_devices') | map(attribute='entity_id') }}
+  - platform: device
+    domain: mqtt
+    type: action
+    device_id: !input remote_devices
+    subtype: on
+    id: press-top-z2m-e2001
+  - platform: device
+    domain: mqtt
+    type: action
+    device_id: !input remote_devices
+    subtype: off
+    id: press-bottom-z2m-e2001
+  - platform: device
+    domain: mqtt
+    type: action
+    device_id: !input remote_devices
+    subtype: brightness_move_up
+    id: hold-top-z2m-e2001
+  - platform: device
+    domain: mqtt
+    type: action
+    device_id: !input remote_devices
+    subtype: brightness_move_down
+    id: hold-bottom-z2m-e2001
+  - platform: device
+    domain: mqtt
+    type: action
+    device_id: !input remote_devices
+    subtype: brightness_stop
+    id: release-z2m-e2001
+  - platform: device
+    domain: mqtt
+    type: action
+    device_id: !input remote_devices
+    subtype: arrow_left_click
+    id: press-left-z2m-e2001
+  - platform: device
+    domain: mqtt
+    type: action
+    device_id: !input remote_devices
+    subtype: arrow_left_hold
+    id: hold-left-z2m-e2001
+  - platform: device
+    domain: mqtt
+    type: action
+    device_id: !input remote_devices
+    subtype: arrow_left_release
+    id: release-left-z2m-e2001
+  - platform: device
+    domain: mqtt
+    type: action
+    device_id: !input remote_devices
+    subtype: arrow_right_click
+    id: press-right-z2m-e2001
+  - platform: device
+    domain: mqtt
+    type: action
+    device_id: !input remote_devices
+    subtype: arrow_right_hold
+    id: hold-right-z2m-e2001
+  - platform: device
+    domain: mqtt
+    type: action
+    device_id: !input remote_devices
+    subtype: arrow_right_release
+    id: release-right-z2m-e2001
 
 action:
   - choose:
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.payload_json.action == 'on' }}"
+          - condition: trigger
+            id: press-top-z2m-e2001
         sequence: !input button_on
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.payload_json.action == 'off' }}"
+          - condition: trigger
+            id: press-bottom-z2m-e2001
         sequence: !input button_off
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.payload_json.action == 'brightness_move_up' }}"
+          - condition: trigger
+            id: hold-top-z2m-e2001
         sequence: !input button_brightness_move_up
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.payload_json.action == 'brightness_move_down' }}"
+          - condition: trigger
+            id: hold-bottom-z2m-e2001
         sequence: !input button_brightness_move_down
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.payload_json.action == 'brightness_stop' }}"
+          - condition: trigger
+            id: release-z2m-e2001
         sequence: !input button_brightness_stop
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.payload_json.action == 'arrow_left_click' }}"
+          - condition: trigger
+            id: press-left-z2m-e2001
         sequence: !input button_left_click
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.payload_json.action == 'arrow_left_hold' }}"
+          - condition: trigger
+            id: hold-left-z2m-e2001
         sequence: !input button_left_hold
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.payload_json.action == 'arrow_left_release' }}"
+          - condition: trigger
+            id: release-left-z2m-e2001
         sequence: !input button_left_release
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.payload_json.action == 'arrow_right_click' }}"
+          - condition: trigger
+            id: press-right-z2m-e2001
         sequence: !input button_right_click
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.payload_json.action == 'arrow_right_hold' }}"
+          - condition: trigger
+            id: hold-right-z2m-e2001
         sequence: !input button_right_hold
       - conditions:
-          - condition: template
-            value_template: "{{ trigger.payload_json.action == 'arrow_right_release' }}"
+          - condition: trigger
+            id: release-right-z2m-e2001
         sequence: !input button_right_release
     default: []
