@@ -128,32 +128,37 @@ trigger:
     event_type: zha_event
     event_data:
       command: "off"
+      endpoint_id: 2
     id: press-top-z2m-e2001
   - platform: event
     event_type: zha_event
     event_data:
       command: "on"
+      endpoint_id: 2
     id: press-bottom-z2m-e2001
   - platform: event
     event_type: zha_event
     event_data:
       command: "brightness_move_up"
+      endpoint_id: 2
     id: hold-top-z2m-e2001
   - platform: event
     event_type: zha_event
     event_data:
       command: "brightness_move_down"
+      endpoint_id: 2
     id: hold-bottom-z2m-e2001
   - platform: event
     event_type: zha_event
     event_data:
       command: "brightness_stop"
+      endpoint_id: 2
     id: release-z2m-e2001
 
 condition:
   - condition: template
     value_template: >
-      {{ trigger.event.data.device_id in
+      {{ trigger.event.data.device_id in 
         states('input_text.remote_devices').split(',') }}
 
 action:
