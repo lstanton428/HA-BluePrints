@@ -128,38 +128,64 @@ trigger:
     event_type: zha_event
     event_data:
       command: "off"
-      endpoint_id: 2
     id: press-top-z2m-e2001
   - platform: event
     event_type: zha_event
     event_data:
       command: "on"
-      endpoint_id: 2
     id: press-bottom-z2m-e2001
   - platform: event
     event_type: zha_event
     event_data:
       command: "brightness_move_up"
-      endpoint_id: 2
     id: hold-top-z2m-e2001
   - platform: event
     event_type: zha_event
     event_data:
       command: "brightness_move_down"
-      endpoint_id: 2
     id: hold-bottom-z2m-e2001
   - platform: event
     event_type: zha_event
     event_data:
       command: "brightness_stop"
-      endpoint_id: 2
     id: release-z2m-e2001
+  - platform: event
+    event_type: zha_event
+    event_data:
+      command: "arrow_left_click"
+    id: press-left-z2m-e2001
+  - platform: event
+    event_type: zha_event
+    event_data:
+      command: "arrow_left_hold"
+    id: hold-left-z2m-e2001
+  - platform: event
+    event_type: zha_event
+    event_data:
+      command: "arrow_left_release"
+    id: release-left-z2m-e2001
+  - platform: event
+    event_type: zha_event
+    event_data:
+      command: "arrow_right_click"
+    id: press-right-z2m-e2001
+  - platform: event
+    event_type: zha_event
+    event_data:
+      command: "arrow_right_hold"
+    id: hold-right-z2m-e2001
+  - platform: event
+    event_type: zha_event
+    event_data:
+      command: "arrow_right_release"
+    id: release-right-z2m-e2001
 
 condition:
   - condition: template
     value_template: >
       {{ trigger.event.data.device_id in 
-        states('input_text.remote_devices').split(',') }}
+        [device.id for device in state('automation').entities if device.device_id in
+          state('input_text.remote_devices').split(',')] }}
 
 action:
   - choose:
